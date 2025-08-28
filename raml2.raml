@@ -1,0 +1,41 @@
+#%RAML 1.0
+title: Book Service API
+version: 1.0
+
+/authors:
+  post:
+    description: Creates a new author.
+    body:
+      application/json:
+        type: |
+          {
+            "type": "object",
+            "properties": {
+              "authorName": { "type": "string" },
+              "dob": { "type": "string", "format": "date" }
+            },
+            "required": ["authorName", "dob"]
+          }
+        example: |
+          {
+            "authorName": "Jane Doe",
+            "dob": "1990-05-15"
+          }
+    responses:
+      201:
+        description: Author created successfully.
+        body:
+          application/json:
+            example: |
+              {
+                "message": "Author created",
+                "authorId": "12345"
+              }
+      400:
+        description: Invalid input provided.
+        body:
+          application/json:
+            example: |
+              {
+                "message": "Bad Request: Missing required fields"
+              }
