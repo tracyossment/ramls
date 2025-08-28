@@ -1,0 +1,103 @@
+#%RAML 1.0
+title: Customer API
+version: v1
+baseUri: https://api.example.com/{version}
+mediaType: application/json
+
+types:
+  Customer:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Unique identifier for the customer
+      name:
+        type: string
+        required: true
+        description: Full name of the customer
+      email:
+        type: string
+        required: true
+        format: email
+        description: Email address of the customer
+
+/customers:
+  get:
+    description: Retrieve a list of customers.
+    responses:
+      200:
+        body:
+          application/json:
+            type: Customer[]
+            examples:
+              example1: |
+                [
+                  {
+                    "id": "1",
+                    "name": "John Doe",
+                    "email": "john.doe@example.com"
+                  },
+                  {
+                    "id": "2",
+                    "name": "Jane Smith",
+                    "email": "jane.smith@example.com"
+                  }
+                ]
+      400:
+        description: Bad request.
+      500:
+        description: Internal server error.
+  post:
+    description: Add a new customer.
+    body:
+      application/json:
+        type: Customer
+        examples:
+          newCustomer: |
+            {
+              "name": "Alice Brown",
+              "email": "alice.brown@example.com"
+            }
+    responses:
+      201:
+        description: Customer created successfully.
+      400:
+        description: Bad request.
+      500:
+        description: Internal server error.
+  /{customerId}:
+    get:
+      description: Retrieve details of a specific customer by ID.
+      responses:
+        200:
+          body:
+            application/json:
+              type: Customer
+              examples:
+                singleCustomer: |
+                  {
+                    "id": "1",
+                    "name": "John Doe",
+                    "email": "john.doe@example.com"
+                  }
+        404:
+          description: Customer not found.
+    put:
+      description: Update an existing customer.
+      body:
+        application/json:
+          type: Customer
+      responses:
+        200:
+          description: Customer updated successfully.
+        400:
+          description: Invalid input.
+        404:
+          description: Customer not found.
+    delete:
+      description: Delete a customer.
+      responses:
+        204:
+          description: Customer deleted successfully.
+        404:
+          description: Customer not found.
